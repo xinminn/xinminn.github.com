@@ -1,0 +1,40 @@
+<script language="javascript">
+function $(_sId)
+{
+   return document.getElementById(_sId);
+}
+function moveStart (event, _sId)
+{
+   var oObj = $(_sId);
+   oObj.onmousemove = mousemove;
+   oObj.onmouseup = mouseup;
+   oObj.setCapture ? oObj.setCapture() : function(){};
+   oEvent = window.event ? window.event : event;
+   var dragData = {x : oEvent.clientX, y : oEvent.clientY};
+   var backData = {x : parseInt(oObj.style.top), y : parseInt(oObj.style.left)};
+
+   function mousemove()
+   {
+      var oEvent = window.event ? window.event : event;
+      var iLeft = oEvent.clientX - dragData["x"] + parseInt(oObj.style.left);
+      var iTop = oEvent.clientY - dragData["y"] + parseInt(oObj.style.top);
+      oObj.style.left = iLeft;
+      oObj.style.top = iTop;
+      dragData = {x: oEvent.clientX, y: oEvent.clientY};
+   }
+
+   function mouseup()
+   {
+      var oEvent = window.event ? window.event : event;
+      oObj.onmousemove = null;
+      oObj.onmouseup = null;
+      //if(oEvent.clientX < 1 || oEvent.clientY < 1 || oEvent.clientX > document.body.clientWidth || oEvent.clientY > document.body.clientHeight)
+      //{
+      //   oObj.style.left = backData.y;
+      //   oObj.style.top = backData.x;
+      //}
+      oObj.releaseCapture ? oObj.releaseCapture() : function(){};
+   }
+} 
+</script>
+<div id="mov" style="position:absolute;height:50px;width:300px;background-color:#FF33ff;top:20px;left:100px;" onMouseDown="javascript:moveStart(event,'mov');"></div>
